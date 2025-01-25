@@ -1,7 +1,7 @@
 # Custom Departure Card for Home Assistant
 This custom-card is based on the integration [ha-db_infoscreen](https://github.com/FaserF/ha-db_infoscreen/) developed by [FaserF](https://github.com/FaserF). 
 
-![Image 1](images/IMG_9078.jpeg) ![Image 2](images/IMG_9079.jpeg)
+![Image 1](images/IMG_9081.jpeg) ![Image 2](images/IMG_9079.jpeg)
 
 ## Card Configuration
 

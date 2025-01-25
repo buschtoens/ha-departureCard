@@ -96,7 +96,7 @@ To install this custom card, follow these steps:
  2.	Add the path to this card to your dashboard ressources (options -> dashboard -> three dots -> ressources):
 
 resources:
-  - url: /local/your-custom-card.js
+  - url: /local/departureCard.js
     type: javascript-module
 
 	

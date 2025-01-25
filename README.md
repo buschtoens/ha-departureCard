@@ -35,6 +35,7 @@ Example: Köln Hbf
 
 ### connections_attribute
 The attribute within the sensor data that holds the list of departures.
+
 Example: next_departures
 
 ### displayed_connections

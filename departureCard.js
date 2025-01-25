@@ -1,3 +1,4 @@
+// v.1 developed by BagelBeef
 class DepartureCard extends HTMLElement {
   // Sets the 'hass' state, which holds the Home Assistant data
   set hass(hass) {
@@ -68,7 +69,7 @@ class DepartureCard extends HTMLElement {
       // If there is a delay, adjust color and add delay text
       if (delay > 0) {
         departureColor = 'red';
-        delayText = `+ ${delay}`;
+        delayText = `+${delay}`;
       }
 
       departuresHtml += `

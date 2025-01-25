@@ -26,55 +26,55 @@ connection_properties:
 ## Parameters Explained
 
 ### type
-	•	Description: Specifies the type of card to display.
+Specifies the type of card to display.
 
 ### title
-	•	Description: The title displayed at the top of the card.
-	•	Example: Köln Hbf
+The title displayed at the top of the card.
+Example: Köln Hbf
 
 ### connections_attribute
-	•	Description: The attribute within the sensor data that holds the list of departures.
-	•	Example: next_departures
+The attribute within the sensor data that holds the list of departures.
+Example: next_departures
 
 ### displayed_connections
-	•	Description: The number of connections (departures) to display.
-	•	Example: 8
+The number of connections (departures) to display.
+Example: 8
 
 ### unix_time
-	•	Description: Boolean flag that determines whether to convert Unix time format for timestamps. Check your sensor. If it shows something like 1737619740 it's unix-time.  
-	•	Example: false
+Boolean flag that determines whether to convert Unix time format for timestamps. Check your sensor. If it shows something like 1737619740 it's unix-time.  
+Example: false
 
 ## connection_properties
 
 Defines how each departure is displayed and which properties are included.
 
 ### targets
-	•	Description: Targets for the connection. If no specific target is needed, set it to null.
-	•	Example: null
+Targets for the connection. If no specific target is needed, set it to null.
+Example: null
 
 ### train
-	•	Description: The attribute from the sensor data that represents the train information.
-	•	Example: train
+The attribute from the sensor data that represents the train information.
+Example: train
 
 ### platform
-	•	Description: The attribute from the sensor data where the train departs from.
-	•	Example: platform
+The attribute from the sensor data where the train departs from.
+Example: platform
 
 ### show_platform
-	•	Description: Boolean flag to specify whether the platform number should be shown or not.
-	•	Example: true
+Boolean flag to specify whether the platform number should be shown or not.
+Example: true
 
 ### departure
-	•	Description: The attribute from the sensor data that contains the scheduled departure time of the train.
-	•	Example: scheduledDeparture
+The attribute from the sensor data that contains the scheduled departure time of the train.
+Example: scheduledDeparture
 
 ### delay
-	•	Description: The attribute from the sensor that represents the delay of the departure.
-	•	Example: delayDeparture
+The attribute from the sensor that represents the delay of the departure.
+Example: delayDeparture
 
 ### entity
-	•	Description: The entity ID of the sensor that contains the departure data.
-	•	Example: sensor.koln_hbf_departures
+The entity ID of the sensor that contains the departure data.
+Example: sensor.koln_hbf_departures
 
 ## Installation
 

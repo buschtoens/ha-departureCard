@@ -14,6 +14,7 @@ entity: sensor.koln_hbf_departures
 connections_attribute: next_departures
 displayed_connections: 8
 unix_time: false
+convertTimeHHMM: false
 connection_properties:
   targets: null
   train: train
@@ -45,6 +46,11 @@ Example: 8
 
 ### unix_time
 Boolean flag that determines whether to convert Unix time format for timestamps. Check your sensor. If it shows something like 1737619740 it's unix-time.  
+
+Example: false
+
+### convertTimeHHMM
+Sometimes the timestamp given by the api appears like this "2025-01-26 20:12:00". Set convertTimeHHMM: true if you want to convert those timestamps into HH:MM.
 
 Example: false
 

@@ -1,4 +1,4 @@
-// v.1 developed by BagelBeef
+// 2025.1.2 developed by BagelBeef
 class DepartureCard extends HTMLElement {
   // Sets the 'hass' state, which holds the Home Assistant data
   set hass(hass) {
@@ -7,6 +7,7 @@ class DepartureCard extends HTMLElement {
     const connectionsAttribute = config.connections_attribute || 'next_departures';
     const displayed_connections = config.displayed_connections || 5;
     const unixTime = config.unix_time || false;
+    const convertTimeHHMM = config.convertTimeHHMM || false;
 
     // Targets (destinations) that should be filtered from the connections list
     const targets = config.connection_properties.targets || [];
@@ -58,6 +59,8 @@ class DepartureCard extends HTMLElement {
       let departure;
       if (unixTime) {
         departure = new Date(connection[config.connection_properties.departure] * 1000).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+      } else if (convertTimeHHMM) {
+        departure = new Date(connection[config.connection_properties.departure].replace(' ', 'T')).toTimeString().slice(0, 5);
       } else {
         departure = connection[config.connection_properties.departure];
       }
@@ -104,7 +107,8 @@ class DepartureCard extends HTMLElement {
       entity: '',
       connections_attribute: 'next_departures',
       displayed_connections: 5,
-      unix_time: true,  // Default to true (convert timestamps)
+      unix_time: false,  
+      convertTimeHHMM: false,
       connection_properties: {
         targets: '', 
         train: 'train', 

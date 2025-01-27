@@ -54,3 +54,4 @@ body:
       label: Context of departure entity
       description: >
         The context of your entity could be helpful. Please go to Developer-Tools -> Template and type in: {{ states.sensor.YOUR_ENTITY.attributes }}
+      render: json

@@ -4,10 +4,7 @@ title: "[Bug]: "
 labels: ["bug"]
 assignees:
   - BagelBeef
-body:
-  - type: markdown
-    attributes:
-      value: |     
+body:    
   - type: textarea
     validations:
       required: true

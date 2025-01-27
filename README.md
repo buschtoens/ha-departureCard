@@ -1,7 +1,32 @@
 # Custom Departure Card for Home Assistant
 This custom-card is based on the integration [ha-db_infoscreen](https://github.com/FaserF/ha-db_infoscreen/) developed by [FaserF](https://github.com/FaserF). 
 
-![Image 1](images/IMG_9081.jpeg) ![Image 2](images/IMG_9079.jpeg)
+<img src="images/IMG_9081.jpeg" alt="Preview1" width="400px">
+
+<img src="images/IMG_9079.jpeg" alt="Preview2" width="400px">
+
+## HACS Installation (recommended)
+
+[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=BagelBeef&repository=ha-departureCard)
+
+If you use this method your departureCard will always update to the newest version.
+
+## Manual Installation
+
+To install this custom card, follow these steps:
+	
+ 1.	Download the card’s JavaScript file and add it to the /www/ directory in your Home Assistant instance.
+	
+ 2.	Add the path to this card to your dashboard ressources (options -> dashboard -> three dots -> ressources):
+
+resources:
+  - url: /local/departureCard.js
+    type: javascript-module
+
+	
+ 3.	Use the example configuration above in your dashboard (manual yaml-configuration).
+
+# Have fun!
 
 ## Card Configuration
 
@@ -93,19 +118,3 @@ The entity ID of the sensor that contains the departure data.
 
 Example: sensor.koln_hbf_departures
 
-## Installation
-
-To install this custom card, follow these steps:
-	
- 1.	Download the card’s JavaScript file and add it to the /www/ directory in your Home Assistant instance.
-	
- 2.	Add the path to this card to your dashboard ressources (options -> dashboard -> three dots -> ressources):
-
-resources:
-  - url: /local/departureCard.js
-    type: javascript-module
-
-	
- 3.	Use the example configuration above in your dashboard (manual yaml-configuration).
-
-# Have fun!

@@ -1,0 +1,60 @@
+name: Report an issue
+description: File an Issue for ha-departureCard
+title: "[Bug]: "
+labels: ["bug"]
+assignees:
+  - BagelBeef
+body:
+  - type: markdown
+    attributes:
+      value: |
+        
+  - type: textarea
+    validations:
+      required: true
+    attributes:
+      label: What happend?
+      description: >-
+        Also tell me, what did you expect to happen?
+  - type: markdown
+    attributes:
+      value: |
+        ## Environment
+  - type: input
+    id: version_card
+    validations:
+      required: true
+    attributes:
+      label: What version of this custom-card are you using?
+      placeholder: 
+      description: >
+        You can find the published releases here: https://github.com/BagelBeef/ha-departureCard/releases
+  - type: input
+    id: version_integration
+    validations:
+      required: true
+    attributes:
+      label: What version of ha-db_infoscreen are you using?
+      placeholder: 
+      description: >
+        You can find the published releases here: https://github.com/FaserF/ha-db_infoscreen/releases/latest
+  - type: markdown
+    attributes:
+      value: |
+        # Details
+  - type: textarea
+    attributes:
+      label: Example YAML snippet
+      description: |
+        Please provide the yaml-code you use in your Dashboard configuration.
+      render: yaml
+  - type: textarea
+    attributes:
+      label: If you found anything in the log
+      description: error messages, warnings, etc.
+      render: txt
+  - type: textarea
+    attributes:
+      label: Context of departure entity
+      description: >
+        The context of your entity could be helpful. Please go to Developer-Tools -> Template and type in: {{ states.sensor.YOUR_ENTITY.attributes }}

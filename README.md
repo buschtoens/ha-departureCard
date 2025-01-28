@@ -7,7 +7,7 @@ This custom-card is based on the integration [ha-db_infoscreen](https://github.c
 
 ## HACS Installation (recommended)
 
-[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=BagelBeef&repository=ha-departureCard)
+[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=BagelBeef&repository=ha-departureCard&category=plugin)
 
 If you use this method your departureCard will always update to the newest version.
 

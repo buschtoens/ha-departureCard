@@ -54,7 +54,7 @@ class DepartureCard extends HTMLElement {
       const destination = connection.destination;
       const delay = connection[config.connection_properties.delay] || 0;
       const platform = connection[config.connection_properties.platform] || 'N/A';  // Default to 'N/A' if no platform info
-
+      const isCanceled = connection[config.connection_properties.isCanceled || 'isCanceled'] || 0;
       // Check if a conversion of unix-time is necessary
       let departure;
       if (unixTime) {
@@ -74,9 +74,11 @@ class DepartureCard extends HTMLElement {
         departureColor = 'red';
         delayText = `+${delay}`;
       }
-
+      
+      const canceledStyle = isCanceled == 1 ? 'text-decoration: line-through; opacity: 0.6;' : '';
+      
       departuresHtml += `
-        <div style="display: grid; grid-template-columns: 2fr 8fr 2fr 2fr 1fr; gap: 8px; padding: 4px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.3); line-height: 1.2;">
+        <div style="display: grid; grid-template-columns: 2fr 8fr 2fr 2fr 1fr; gap: 8px; padding: 4px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.3); line-height: 1.2;${canceledStyle}">
           <div style="font-size: 0.9em; text-align: left;"><strong>${train}</strong></div>
           <div style="font-size: 0.8em; text-align: left; padding-left: 4px;">${destination}</div>
           <div style="font-size: 0.9em; text-align: left; padding-left: 4px;">
@@ -116,6 +118,7 @@ class DepartureCard extends HTMLElement {
         delay: 'delay',
         platform: 'platform',
         show_platform: true,  // Default to true (platform column always rendered)
+        isCanceled: 'isCanceled'
       },
     };
   }

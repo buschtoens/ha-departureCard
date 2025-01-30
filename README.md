@@ -47,7 +47,7 @@ connection_properties:
   show_platform: true
   departure: scheduledDeparture
   delay: delayDeparture
-  isCanceled: isCanceled
+  isCancelled: isCancelled
 ```
 
 ## Parameters Explained

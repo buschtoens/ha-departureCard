@@ -1,9 +1,9 @@
 # Custom Departure Card for Home Assistant
 This custom-card is based on the integration [ha-db_infoscreen](https://github.com/FaserF/ha-db_infoscreen/) developed by [FaserF](https://github.com/FaserF). 
 
-<img src="images/KoelnHbf.jpg" alt="Preview1" width="400px">
+<img src="https://raw.githubusercontent.com/BagelBeef/ha-departureCard/refs/heads/main/images/KoelnHbf.jpg" alt="Preview1" width="400px">
 
-<img src="images/Kippekausen.jpg" alt="Preview2" width="400px">
+<img src="https://raw.githubusercontent.com/BagelBeef/ha-departureCard/refs/heads/main/images/Kippekausen.jpg" alt="Preview2" width="400px">
 
 ## HACS Installation (recommended)
 
@@ -83,7 +83,7 @@ Now you have to provide the name of the stop which you want to filter all remain
 ```yaml
 filterByStop: Köln Messe/Deutz
 ```
-<img src="images/filterByStop.jpg" alt="Preview1" width="400px">
+<img src="https://raw.githubusercontent.com/BagelBeef/ha-departureCard/refs/heads/main/images/filterByStop.jpg" alt="Preview3" width="400px">
 
 You can skip those lines to disable this filter. 
 

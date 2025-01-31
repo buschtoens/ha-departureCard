@@ -1,9 +1,9 @@
 # Custom Departure Card for Home Assistant
 This custom-card is based on the integration [ha-db_infoscreen](https://github.com/FaserF/ha-db_infoscreen/) developed by [FaserF](https://github.com/FaserF). 
 
-<img src="images/IMG_9081.jpeg" alt="Preview1" width="400px">
+<img src="images/KoelnHbf.jpg" alt="Preview1" width="400px">
 
-<img src="images/IMG_9079.jpeg" alt="Preview2" width="400px">
+<img src="images/Kippekausen.jpg" alt="Preview2" width="400px">
 
 ## HACS Installation (recommended)
 
@@ -47,8 +47,45 @@ connection_properties:
   show_platform: true
   departure: scheduledDeparture
   delay: delayDeparture
-  isCancelled: isCancelled
+  isCancelled: isCancelled 
+  stopAttribute: route 
+  filterByStop: Köln Messe/Deutz
+  stationName: Köln Hbf
 ```
+## Filter Options
+There are multiple ways you can filter and display connections. 
+
+### 1. Filter by target
+If you want to see all connections with a specific final destination, you can filter your connections by target. 
+This example shows all trains and busses with destination "Düsseldorf Hbf": 
+```yaml
+targets: Düsseldorf Hbf
+```
+
+If you want disable this filter and see all connections just set it to "null" or skip this line.
+
+### 2. Filter by stop
+If you want to show only connections which have a certain stop, you have to make sure this information is provided by the api. Not for all stations those information are given.
+
+You can check your entity with the template tool in the developer section of your home assistant.
+```yaml
+{{ states.sensor.YOUR_ENTITY.attributes }}
+```
+Usually there should be an route[] item which contains a list of stops. You can use the stopAttribute if the list of stops are not displayed under route or if the name of the element is different. If it's route you can skip this line. 
+
+Since the list of stops contains all stops of the train, we need to know which stops are allready done and which stops are still to go. Therefor you have to provide the information of your stationName.
+```yaml
+stationName: Köln Hbf
+```
+All stops before Köln Hbf will be ignored in the list of stops because those are not in the direction of travel. 
+
+Now you have to provide the name of the stop which you want to filter all remaining connections by. 
+```yaml
+filterByStop: Köln Messe/Deutz
+```
+<img src="images/filterByStop.jpg" alt="Preview1" width="400px">
+
+You can skip those lines to disable this filter. 
 
 ## Parameters Explained
 

@@ -1,4 +1,4 @@
-// 2025.1.2 developed by BagelBeef
+// developed by BagelBeef
 class DepartureCard extends HTMLElement {
   // Sets the 'hass' state, which holds the Home Assistant data
   set hass(hass) {
@@ -12,6 +12,11 @@ class DepartureCard extends HTMLElement {
     // Targets (destinations) that should be filtered from the connections list
     const targets = config.connection_properties.targets || [];
     const connections = hass.states[entity].attributes[connectionsAttribute];
+    
+    // Get stopAttribute and stop for filtering
+    const stopAttribute = config.connection_properties.stopAttribute || 'route'; //where to found route list
+    const stop = config.connection_properties.filterByStop || null; // filterByStop stop can be null
+    const stationName = config.connection_properties.stationName || null; // stationName to slice route up to statioName
 
     // If no connections are available, display a message saying no departures are available
     if (!connections || connections.length === 0) {
@@ -31,13 +36,35 @@ class DepartureCard extends HTMLElement {
         targets.includes(connection.destination)
       );
     }
+    
+    // Filter by the specified stop in the route, but only if stop and stopAttribute are valid
+    if (stop && stopAttribute) {
+      filtered_connections = filtered_connections.filter(connection => {
+        const route = connection[stopAttribute];
+        if (route && Array.isArray(route)) {
+          // Find the index of stationName in the route
+          const stationIndex = route.findIndex(routeStop => routeStop.name === stationName);
+          if (stationIndex === -1) {
+            return false; // stationName is not in the route, so skip this connection
+          }
 
+          // Extract stops after stationName
+          const stopsAfterStation = route.slice(stationIndex);
+          connection[stopAttribute] = stopsAfterStation; // Update the route list to include only stops after stationName
+
+          // Check if the stop exists in the stops after stationName
+          return stopsAfterStation.some(routeStop => routeStop.name === stop);
+        }
+        return false; // No valid route or no valid stops in the route
+      });
+    }
+    
     // If no connections match the specified targets, show a message saying no departures were found
     if (filtered_connections.length === 0) {
       this.innerHTML = `<ha-card>
                           <div style="padding: 16px;">
                             <h1>${config.title}</h1>
-                            <p>No departures found for the specified destinations.</p>
+                            <p>No departures found for the specified destinations or stops. Check statioName if you want to use filter by stop!</p>
                           </div>
                         </ha-card>`;
       return;
@@ -46,8 +73,13 @@ class DepartureCard extends HTMLElement {
     // Build HTML content to display the departure information
     let departuresHtml = `<ha-card>
                            <div style="padding: 16px;">
-                             <h1>${config.title}</h1>`;
-
+                             <h1 style="margin-top: 0px; margin-bottom: 0px;">${config.title}</h1>`;
+    
+    // Display the filtered stop information, if any
+    if (stop) {
+      departuresHtml += `<p style="font-size: 0.8em; color: gray; margin-top: 0px;">Filtered by stop: ${stop}</p>`; // Show filtered stop
+    }
+    
     // Loop through the filtered connections and display them
     filtered_connections.slice(0, displayed_connections).forEach(connection => {
       const train = connection[config.connection_properties.train]; 
@@ -118,7 +150,10 @@ class DepartureCard extends HTMLElement {
         delay: 'delay',
         platform: 'platform',
         show_platform: true,  // Default to true (platform column always rendered)
-        isCancelled: 'isCancelled'
+        isCancelled: 'isCancelled',
+        stopAttribute: 'route',  // Attribute for the stops/route
+        filterByStop: '',   // The specific stop to filter by
+        stationName: ''  // Your stationName for deleting stops before it
       },
     };
   }

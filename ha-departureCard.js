@@ -110,7 +110,7 @@ class DepartureCard extends HTMLElement {
       let isCancelledStyle = isCancelled == 1 ? 'text-decoration: line-through; opacity: 0.6;' : '';
       
       departuresHtml += `
-        <div style="display: grid; grid-template-columns: 2fr 7fr 2fr 2fr 1fr; gap: 8px; padding: 4px 0; border-bottom: 1px solid rgba(180, 180, 180, 0.6); line-height: 1.2;${isCancelledStyle}">
+        <div style="display: grid; grid-template-columns: 3fr 6fr 2fr 2fr 1fr; gap: 8px; padding: 4px 0; border-bottom: 1px solid rgba(180, 180, 180, 0.6); line-height: 1.2;${isCancelledStyle}">
           <div style="font-size: 0.9em; text-align: left;"><strong>${train}</strong></div>
           <div style="font-size: 0.8em; text-align: left; padding-left: 4px;">${destination}</div>
           <div style="font-size: 0.9em; text-align: left; padding-left: 4px;">

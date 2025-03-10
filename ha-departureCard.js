@@ -1,9 +1,41 @@
 // developed by BagelBeef
 class DepartureCard extends HTMLElement {
+  constructor() {
+    super();
+    this.prevState = null;  // saves the previous state of the departure entity
+    this.prevHass = null; // saves the previous Hass
+  }
   // Sets the 'hass' state, which holds the Home Assistant data
   set hass(hass) {
     const config = this.config;
     const entity = config.entity;
+
+    //check if entity is valid
+    if (!entity || !hass.states || !hass.states?.[entity]) {
+      this.innerHTML = `<ha-card>
+                          <div class="card-content">
+                            <h1>${config.title}</h1>
+                            <p>No valid entity.</p>
+                          </div>
+                        </ha-card>`;
+      return;
+    }
+
+    const currentState = hass.states[entity].state;
+
+    // Check if entity and attributes has changed
+    if (this.prevHass && this.prevHass.states[entity] === hass.states[entity]) {
+      return;
+    }
+
+    // Check if the state of entity has changed
+    if (this.prevState === currentState) {
+      return;
+    }
+
+    this.prevState = currentState; // save current state
+    this.prevHass = hass; // save current hass
+
     const connectionsAttribute = config.connections_attribute || 'next_departures';
     const displayed_connections = config.displayed_connections || 5;
     const unixTime = config.unix_time || false;

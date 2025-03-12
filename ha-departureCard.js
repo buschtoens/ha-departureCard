@@ -13,7 +13,7 @@ class DepartureCard extends HTMLElement {
     //check if entity is valid
     if (!entity || !hass.states || !hass.states?.[entity]) {
       this.innerHTML = `<ha-card>
-                          <div style="padding: 16px;">
+                          <div class="card-content">
                             <h1>${config.title}</h1>
                             <p>No valid entity.</p>
                           </div>

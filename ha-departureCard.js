@@ -199,18 +199,11 @@ class DepartureCard extends HTMLElement {
         departure = connection[config.connection_properties.departure] || '';
       }
 
-      // Default color for departure time and text for no delay
-      let departureColor = 'green';
-      let delayText = '';
+      // Default color for departure time and text for no delay.mIf there is a delay, adjust color and add delay text
+      let departureColor = delay > 0 ? "red" : "green";
+      let delayText = delay > 0 ? `+${delay}` : "";
+      let isCancelledClass = isCancelled == 1 ? "cancelled" : "";
 
-      // If there is a delay, adjust color and add delay text
-      if (delay > 0) {
-        departureColor = 'red';
-        delayText = `+${delay}`;
-      }
-      
-      let isCancelledStyle = isCancelled == 1 ? 'text-decoration: line-through; opacity: 0.6;' : '';
-      
       departuresHtml += `
           <tr class="departure-row ${isCancelledClass}">
             <td class="train"><strong>${train}</strong></td>

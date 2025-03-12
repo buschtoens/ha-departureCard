@@ -53,7 +53,7 @@ class DepartureCard extends HTMLElement {
     // If no connections are available, display a message saying no departures are available
     if (!connections || connections.length === 0) {
       this.innerHTML = `<ha-card>
-                          <div style="padding: 16px;">
+                          <div class="card-content">
                             <h1>${config.title}</h1>
                             <p>No departures available.</p>
                           </div>
@@ -94,7 +94,7 @@ class DepartureCard extends HTMLElement {
     // If no connections match the specified targets, show a message saying no departures were found
     if (filtered_connections.length === 0) {
       this.innerHTML = `<ha-card>
-                          <div style="padding: 16px;">
+                          <div class="card-content">
                             <h1>${config.title}</h1>
                             <p>No departures found for the specified destinations or stops. Check statioName if you want to use filter by stop!</p>
                           </div>
@@ -103,14 +103,84 @@ class DepartureCard extends HTMLElement {
     }
 
     // Build HTML content to display the departure information
-    let departuresHtml = `<ha-card>
-                           <div style="padding: 16px;">
-                             <h1 style="margin-top: 0px; margin-bottom: 0px;">${config.title}</h1>`;
+    let departuresHtml = `
+      <ha-card>
+        <style>
+          .card-content {
+            max-width: 100%;
+            padding: 16px;
+            overflow-x: auto;
+          }
+          h1 {
+            margin: 0;
+          }
+          .filtered-stop {
+            font-size: 0.8em;
+            color: gray;
+            margin-top: 0;
+          }
+          .table {
+            width: 100%;
+            border-collapse: collapse;
+          }
+          .departure-row {
+            padding: 4px 0;
+          }
+          .departure-row td{
+            border-bottom: 1px solid rgba(180, 180, 180, 0.6);
+            line-height: 1.2;
+          }
+          .cancelled {
+            text-decoration: line-through;
+            opacity: 0.6;
+          }
+          .train, .destination, .platform, .departure, .delay {
+            font-size: 0.9em;
+            padding: 4px;
+          }
+          .train {
+            text-align: left;
+            white-space: nowrap;
+          }
+          .destination {
+            text-align: left;
+            max-width: 150px;
+          }
+          .destination-text {
+            display: block;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+          .platform {
+            text-align: left;            
+            white-space: nowrap;
+          }
+          .departure {
+            text-align: right;
+            white-space: nowrap;
+          }
+          .delay {
+            text-align: left;
+            padding-left: 4px;
+            min-width: 20px;
+            white-space: nowrap;
+          }
+          .delay span {
+            color: red;
+          }
+        </style>
+        <div class="card-content">
+          <h1>${config.title}</h1>
+    `;
     
     // Display the filtered stop information, if any
     if (stop) {
-      departuresHtml += `<p style="font-size: 0.8em; color: gray; margin-top: 0px;">Filtered by stop: ${stop}</p>`; // Show filtered stop
+      departuresHtml += `<p class="filtered-stop">Filtered by stop: ${stop}</p>`; // Show filtered stop
     }
+    
+    //Start table
+    departuresHtml += '<table class="table"><tbody>';
     
     // Loop through the filtered connections and display them
     filtered_connections.slice(0, displayed_connections).forEach(connection => {
@@ -142,21 +212,17 @@ class DepartureCard extends HTMLElement {
       let isCancelledStyle = isCancelled == 1 ? 'text-decoration: line-through; opacity: 0.6;' : '';
       
       departuresHtml += `
-        <div style="display: grid; grid-template-columns: 3fr 6fr 2fr 2fr 1fr; gap: 8px; padding: 4px 0; border-bottom: 1px solid rgba(180, 180, 180, 0.6); line-height: 1.2;${isCancelledStyle}">
-          <div style="font-size: 0.9em; text-align: left;"><strong>${train}</strong></div>
-          <div style="font-size: 0.8em; text-align: left; padding-left: 4px;">${destination}</div>
-          <div style="font-size: 0.9em; text-align: left; padding-left: 4px;">
-            ${config.connection_properties.show_platform ? platform : ''}
-          </div>
-          <div style="font-size: 0.9em; text-align: right; color: ${departureColor};">${departure}</div>
-          <div style="font-size: 0.9em; text-align: left; color: ${departureColor};">
-            ${delayText ? `<span style="color: red;">${delayText}</span>` : ''}
-          </div>
-        </div>
-      `;
+          <tr class="departure-row ${isCancelledClass}">
+            <td class="train"><strong>${train}</strong></td>
+            <td class="destination"><span class="destination-text">${destination}</span></td>
+            ${config.connection_properties.show_platform ? `<td class="platform">${platform}</td>` : ""}
+            <td class="departure" style="color: ${departureColor};">${departure}</td>
+            <td class="delay">${delayText ? `<span>${delayText}</span>` : ""}</td>
+          </tr>
+        `;
     });
 
-    departuresHtml += `</div></ha-card>`;
+    departuresHtml += `</tbody></table></div></ha-card>`;
 
     this.innerHTML = departuresHtml;
   }

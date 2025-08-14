@@ -208,7 +208,7 @@ class DepartureCard extends HTMLElement {
           <tr class="departure-row ${isCancelledClass}">
             <td class="train"><strong>${train}</strong></td>
             <td class="destination"><span class="destination-text">${destination}</span></td>
-            ${config.connection_properties.show_platform ? `<td class="platform">${platform}</td>` : ""}
+            ${config.show_platform ? `<td class="platform">${platform}</td>` : ""}
             <td class="departure" style="color: ${departureColor};">${departure}</td>
             <td class="delay">${delayText ? `<span>${delayText}</span>` : ""}</td>
           </tr>
@@ -326,7 +326,7 @@ class DepartureCard extends HTMLElement {
                 { name: "filterByStop", selector: { text: {} } },
                 { name: "stationName", selector: { text: {} } }
               ]
-            },            
+            },
         ]
     };
 }
@@ -336,10 +336,9 @@ class DepartureCard extends HTMLElement {
 customElements.define('departure-card', DepartureCard);
 window.customCards = window.customCards || [];
 window.customCards.push({
-    type: "dev-departure-card",
+    type: "departure-card",
     name: "HA Departure Card",
     preview: true,
     description: "Display your next departures",
     documentationURL: "https://github.com/BagelBeef/ha-departureCard",
 });
-

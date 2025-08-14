@@ -42,13 +42,13 @@ class DepartureCard extends HTMLElement {
     const convertTimeHHMM = config.convertTimeHHMM || false;
 
     // Targets (destinations) that should be filtered from the connections list
-    const targets = config.connection_properties.targets || [];
+    const targets = config.targets || [];
     const connections = hass.states[entity].attributes[connectionsAttribute];
     
     // Get stopAttribute and stop for filtering
-    const stopAttribute = config.connection_properties.stopAttribute || 'route'; //where to found route list
-    const stop = config.connection_properties.filterByStop || null; // filterByStop stop can be null
-    const stationName = config.connection_properties.stationName || null; // stationName to slice route up to statioName
+    const stopAttribute = config.stopAttribute || 'route'; //where to found route list
+    const stop = config.filterByStop || null; // filterByStop stop can be null
+    const stationName = config.stationName || null; // stationName to slice route up to statioName
 
     // If no connections are available, display a message saying no departures are available
     if (!connections || connections.length === 0) {
@@ -184,19 +184,19 @@ class DepartureCard extends HTMLElement {
     
     // Loop through the filtered connections and display them
     filtered_connections.slice(0, displayed_connections).forEach(connection => {
-      const train = connection[config.connection_properties.train]; 
+      const train = connection[config.train]; 
       const destination = connection.destination;
-      const delay = connection[config.connection_properties.delay] || 0;
-      const platform = connection[config.connection_properties.platform] || 'N/A';  // Default to 'N/A' if no platform info
-      const isCancelled = connection[config.connection_properties.isCancelled || 'isCancelled'] || 0;
+      const delay = connection[config.delay] || 0;
+      const platform = connection[config.platform] || 'N/A';  // Default to 'N/A' if no platform info
+      const isCancelled = connection[config.isCancelled || 'isCancelled'] || 0;
       // Check if a conversion of unix-time is necessary
       let departure;
       if (unixTime) {
-        departure = new Date(connection[config.connection_properties.departure] * 1000).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        departure = new Date(connection[config.departure] * 1000).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
       } else if (convertTimeHHMM) {
-        departure = new Date(connection[config.connection_properties.departure].replace(' ', 'T')).toTimeString().slice(0, 5);
+        departure = new Date(connection[config.departure].replace(' ', 'T')).toTimeString().slice(0, 5);
       } else {
-        departure = connection[config.connection_properties.departure] || '';
+        departure = connection[config.departure] || '';
       }
 
       // Default color for departure time and text for no delay.mIf there is a delay, adjust color and add delay text
@@ -224,6 +224,15 @@ class DepartureCard extends HTMLElement {
   setConfig(config) {
     this.config = config;
   }
+  modifyConfig(config) {
+    const Config = {
+        tap_action: {
+            action: 'url',
+        },
+        ...config, 
+    };
+    return Config;
+}
 
   // Returns a sample configuration for the custom card
   static getStubConfig() {
@@ -234,21 +243,103 @@ class DepartureCard extends HTMLElement {
       displayed_connections: 5,
       unix_time: false,  
       convertTimeHHMM: false,
-      connection_properties: {
-        targets: '', 
-        train: 'train', 
-        departure: 'scheduledTime',
-        delay: 'delay',
-        platform: 'platform',
-        show_platform: true,  // Default to true (platform column always rendered)
-        isCancelled: 'isCancelled',
-        stopAttribute: 'route',  // Attribute for the stops/route
-        filterByStop: '',   // The specific stop to filter by
-        stationName: ''  // Your stationName for deleting stops before it
-      },
+      targets: '', 
+      train: 'train', 
+      departure: 'scheduledTime',
+      delay: 'delay',
+      platform: 'platform',
+      show_platform: true,  // Default to true (platform column always rendered)
+      isCancelled: 'isCancelled',
+      stopAttribute: 'route',  // Attribute for the stops/route
+      filterByStop: '',   // The specific stop to filter by
+      stationName: ''  // Your stationName for deleting stops before it
     };
   }
+  static getConfigForm() {
+    return {
+        schema: [
+            {
+                name: "title",
+                required: true,
+                selector: { text: {} }
+            },
+            {
+                name: "entity",
+                required: true,
+                selector: { entity: {} }
+            },
+            {
+                name: "connections_attribute",
+                required: true,
+                selector: { text: {} }
+            },
+            {
+              type: "constant",
+              name: "Properties"              
+            },
+            {
+              name: "",              
+              type: "grid",
+              multiple: false,
+              default: {},  
+              schema: [
+                { name: "train", selector: { text: {} } },
+                { name: "isCancelled", selector: { text: {} } },
+                { name: "platform", selector: { text: {} } },
+                { name: "show_platform", selector: { boolean: {} } },
+              ]
+            },
+            
+            {
+                name: "displayed_connections",
+                required: true,
+                selector: { number: { min: 1, max: 20, mode: "box" } }
+            },
+            {
+              type: "constant",
+              name: "Time Information"              
+            },
+            {
+              name: "",
+              type: "grid",
+              multiple: false,
+              default: {},  
+              schema: [
+                { name: "departure", description: "Departure time attribute", selector: { text: {} } },
+                { name: "delay", selector: { text: {} } },
+                { name: "unix_time", selector: { boolean: {} } },
+                { name: "convertTimeHHMM", selector: { boolean: {} } }
+              ]
+            },
+            {
+              type: "constant",
+              name: "Filter"              
+            },
+            {
+              name: "",
+              type: "grid",
+              multiple: false,
+              default: {},  
+              schema: [
+                { name: "targets", selector: { text: {} } },
+                { name: "stopAttribute", selector: { text: {} } },
+                { name: "filterByStop", selector: { text: {} } },
+                { name: "stationName", selector: { text: {} } }
+              ]
+            },            
+        ]
+    };
+}
 }
 
 // Defines the custom HTML element 'departure-card'
 customElements.define('departure-card', DepartureCard);
+window.customCards = window.customCards || [];
+window.customCards.push({
+    type: "dev-departure-card",
+    name: "HA Departure Card",
+    preview: true,
+    description: "Display your next departures",
+    documentationURL: "https://github.com/BagelBeef/ha-departureCard",
+});
+

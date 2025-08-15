@@ -30,7 +30,7 @@ resources:
 
 ## Card Configuration
 
-The following example demonstrates how to configure the card in your dashboard. 
+The following example demonstrates how to configure the card in your dashboard. You can use the graphical editor or the following yaml configuration.
 
 ```yaml
 type: custom:departure-card
@@ -40,17 +40,17 @@ connections_attribute: next_departures
 displayed_connections: 8
 unix_time: false
 convertTimeHHMM: false
-connection_properties:
-  targets: null
-  train: train
-  platform: platform
-  show_platform: true
-  departure: scheduledDeparture
-  delay: delayDeparture
-  isCancelled: isCancelled 
-  stopAttribute: route 
-  filterByStop: Köln Messe/Deutz
-  stationName: Köln Hbf
+relativeTime: false
+targets: null
+train: train
+platform: platform
+show_platform: true
+departure: scheduledDeparture
+delay: delayDeparture
+isCancelled: isCancelled 
+stopAttribute: route 
+filterByStop: Köln Messe/Deutz
+stationName: Köln Hbf
 ```
 ## Filter Options
 There are multiple ways you can filter and display connections. 
@@ -109,6 +109,9 @@ Boolean flag that determines whether to convert Unix time format for timestamps.
 
 ### convertTimeHHMM
 Sometimes the timestamp given by the api appears like this "2025-01-26 20:12:00". Set convertTimeHHMM: true if you want to convert those timestamps into HH:MM.
+
+### relativeTime
+If you want to display time values in relative time set realativeTime: true.
 
 ## connection_properties
 

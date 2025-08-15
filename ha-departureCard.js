@@ -40,6 +40,7 @@ class DepartureCard extends HTMLElement {
     const displayed_connections = config.displayed_connections || 5;
     const unixTime = config.unix_time || false;
     const convertTimeHHMM = config.convertTimeHHMM || false;
+    const relativeTime = config.relativeTime || false;
 
     // Targets (destinations) that should be filtered from the connections list
     const targets = config.targets || [];
@@ -204,13 +205,25 @@ class DepartureCard extends HTMLElement {
       let delayText = delay > 0 ? `+${delay}` : "";
       let isCancelledClass = isCancelled == 1 ? "cancelled" : "";
 
+      if (relativeTime) {
+        let [h, m] = departure.split(':').map(Number),
+          now = new Date(),
+          d = new Date(now);
+        d.setHours(h, m + delay, 0, 0);
+        if (d < now && d-now > 5) d.setDate(d.getDate() + 1); // Mitternacht-Übergang
+
+        let diffMinutes = Math.round((d - now) / 60000);
+        departure = diffMinutes <= 0 ? "Jetzt" : `In ${diffMinutes} Minuten`;
+        delayText = "";
+      }
+
       departuresHtml += `
           <tr class="departure-row ${isCancelledClass}">
             <td class="train"><strong>${train}</strong></td>
             <td class="destination"><span class="destination-text">${destination}</span></td>
             ${config.show_platform ? `<td class="platform">${platform}</td>` : ""}
             <td class="departure" style="color: ${departureColor};">${departure}</td>
-            <td class="delay">${delayText ? `<span>${delayText}</span>` : ""}</td>
+            ${!relativeTime ? `<td class="delay">${delayText ? `<span>${delayText}</span>` : ""}</td>` : ""}
           </tr>
         `;
     });
@@ -243,6 +256,7 @@ class DepartureCard extends HTMLElement {
       displayed_connections: 5,
       unix_time: false,  
       convertTimeHHMM: false,
+      relativeTime: false,
       targets: '', 
       train: 'train', 
       departure: 'scheduledTime',
@@ -309,6 +323,8 @@ class DepartureCard extends HTMLElement {
                 { name: "delay", selector: { text: {} } },
                 { name: "unix_time", selector: { boolean: {} } },
                 { name: "convertTimeHHMM", selector: { boolean: {} } }
+                { name: "relativeTime", selector: { boolean: {} } }
+
               ]
             },
             {

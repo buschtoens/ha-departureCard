@@ -322,9 +322,8 @@ class DepartureCard extends HTMLElement {
                 { name: "departure", description: "Departure time attribute", selector: { text: {} } },
                 { name: "delay", selector: { text: {} } },
                 { name: "unix_time", selector: { boolean: {} } },
-                { name: "convertTimeHHMM", selector: { boolean: {} } }
+                { name: "convertTimeHHMM", selector: { boolean: {} } },
                 { name: "relativeTime", selector: { boolean: {} } }
-
               ]
             },
             {

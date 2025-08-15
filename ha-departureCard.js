@@ -5,22 +5,33 @@ class DepartureCard extends HTMLElement {
     this.prevState = null;  // saves the previous state of the departure entity
     this.prevHass = null; // saves the previous Hass
   }
+  validateConfig(config, hass) {
+    const errors = [];
+    
+    if (!config.entity) errors.push("No entity configured.");
+    else if (!hass.states?.[config.entity]) errors.push(`Entity '${config.entity}' not found in Home Assistant.`);
+    
+    if (!config.departure) errors.push("Missing 'departure' attribute in config.");
+    if (!config.train) errors.push("Missing 'train' attribute in config.");
+    if (!config.delay) errors.push("Missing 'delay' attribute in config.");
+    if (!config.connections_attribute) errors.push("Missing connection attribute.");
+    
+    return errors;
+  }
   // Sets the 'hass' state, which holds the Home Assistant data
   set hass(hass) {
     const config = this.config;
-    const entity = config.entity;
-
-    //check if entity is valid
-    if (!entity || !hass.states || !hass.states?.[entity]) {
-      this.innerHTML = `<ha-card>
-                          <div class="card-content">
-                            <h1>${config.title}</h1>
-                            <p>No valid entity.</p>
-                          </div>
-                        </ha-card>`;
-      return;
+    const errors = this.validateConfig(config, hass);
+    if (errors.length > 0) {
+    this.innerHTML = `<ha-card>
+        <div class="card-content">
+            <h1>${config.title || "Departure Card"}</h1>
+            <p>${errors.join("<br>")}</p>
+        </div>
+    </ha-card>`;
+    return;
     }
-
+    const entity = config.entity;
     const currentState = hass.states[entity].state;
 
     // Check if entity and attributes has changed

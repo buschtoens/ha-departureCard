@@ -52,6 +52,7 @@ class DepartureCard extends HTMLElement {
     const unixTime = config.unix_time || false;
     const convertTimeHHMM = config.convertTimeHHMM || false;
     const relativeTime = config.relativeTime || false;
+    const limit = config.limit || 60;
 
     // Targets (destinations) that should be filtered from the connections list
     const targets = config.targets || [];
@@ -244,7 +245,7 @@ class DepartureCard extends HTMLElement {
         if (d < now && d-now > 5) d.setDate(d.getDate() + 1); // Mitternacht-Übergang
 
         let diffMinutes = Math.round((d - now) / 60000);
-        if (diffMinutes < 60) {
+        if (diffMinutes < limit) {
           departure = diffMinutes <= 0 ? "Jetzt" : `In ${diffMinutes} Minuten`;
           delayText = "";
         } 
@@ -256,7 +257,7 @@ class DepartureCard extends HTMLElement {
         
         let diffMinutes = Math.round((d - new Date()) / 60000);
         
-        if (diffMinutes < 60) {
+        if (diffMinutes < limit) {
           departure = diffMinutes <= 0 ? "Jetzt" : `In ${diffMinutes} Minuten`;
           delayText = "";
         } else {
@@ -304,6 +305,7 @@ class DepartureCard extends HTMLElement {
       unix_time: false,  
       convertTimeHHMM: false,
       relativeTime: false,
+      limit : 60,
       targets: '', 
       exclude: false,
       line: '',
@@ -373,7 +375,8 @@ class DepartureCard extends HTMLElement {
                 { name: "delay", selector: { text: {} } },
                 { name: "unix_time", selector: { boolean: {} } },
                 { name: "convertTimeHHMM", selector: { boolean: {} } },
-                { name: "relativeTime", selector: { boolean: {} } }
+                { name: "relativeTime", selector: { boolean: {} } },
+                { name: "limit", selector: { number: {min: 1, max: 60, mode: "box" } } }
               ]
             },
             {

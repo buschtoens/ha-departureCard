@@ -203,7 +203,7 @@ class DepartureCard extends HTMLElement {
       const isCancelled = connection[config.isCancelled || 'isCancelled'] || 0;
       // Check if a conversion of unix-time is necessary
       let departure;
-      if (unixTime) {
+      if (unixTime && !relativeTime) {
         departure = new Date(connection[config.departure] * 1000).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
       } else if (convertTimeHHMM) {
         departure = new Date(connection[config.departure].replace(' ', 'T')).toTimeString().slice(0, 5);
@@ -216,7 +216,7 @@ class DepartureCard extends HTMLElement {
       let delayText = delay > 0 ? `+${delay}` : "";
       let isCancelledClass = isCancelled == 1 ? "cancelled" : "";
 
-      if (relativeTime) {
+      if (relativeTime && !unixTime) {
         let [h, m] = departure.split(':').map(Number),
           now = new Date(),
           d = new Date(now);
@@ -224,8 +224,24 @@ class DepartureCard extends HTMLElement {
         if (d < now && d-now > 5) d.setDate(d.getDate() + 1); // Mitternacht-Übergang
 
         let diffMinutes = Math.round((d - now) / 60000);
-        departure = diffMinutes <= 0 ? "Jetzt" : `In ${diffMinutes} Minuten`;
-        delayText = "";
+        if (diffMinutes < 60) {
+          departure = diffMinutes <= 0 ? "Jetzt" : `In ${diffMinutes} Minuten`;
+          delayText = "";
+        } 
+        
+      }
+      if (relativeTime && unixTime) {
+        let d = new Date(connection[config.departure] * 1000);
+        d.setMinutes(d.getMinutes() + Number(delay));
+        
+        let diffMinutes = Math.round((d - new Date()) / 60000);
+        
+        if (diffMinutes < 60) {
+          departure = diffMinutes <= 0 ? "Jetzt" : `In ${diffMinutes} Minuten`;
+          delayText = "";
+        } else {
+          departure = new Date(connection[config.departure] * 1000).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        }
       }
 
       departuresHtml += `

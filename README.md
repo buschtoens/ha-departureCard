@@ -41,7 +41,11 @@ displayed_connections: 8
 unix_time: false
 convertTimeHHMM: false
 relativeTime: false
+limit: 60
 targets: null
+exclude: false
+line: null
+lineExclude: false
 train: train
 platform: platform
 show_platform: true
@@ -62,9 +66,19 @@ This example shows all trains and busses with destination "Düsseldorf Hbf":
 targets: Düsseldorf Hbf
 ```
 
-If you want disable this filter and see all connections just set it to "null" or skip this line.
+If you want disable this filter and see all connections just set it to "null" or skip this line. If you want to invert the target filter you have to add:
+```yaml
+exclude: true
+```
 
-### 2. Filter by stop
+### 2. Filter by line
+If you want see only specific trains you can enter the train / line number. If you want to filter out specific trains / lines you just have to switch lineExclude to true and the given train number will be excluded.
+```yaml
+line: RE 1
+lineExclude: true
+```
+
+### 3. Filter by stop
 If you want to show only connections which have a certain stop, you have to make sure this information is provided by the api. Not for all stations those information are given.
 
 You can check your entity with the template tool in the developer section of your home assistant.
@@ -112,6 +126,11 @@ Sometimes the timestamp given by the api appears like this "2025-01-26 20:12:00"
 
 ### relativeTime
 If you want to display time values in relative time set realativeTime: true.
+
+### limit
+All time values above the limit will be displayed in HH:MM. 
+
+Default is set to 60
 
 ## connection_properties
 

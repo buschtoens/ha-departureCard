@@ -56,6 +56,9 @@ class DepartureCard extends HTMLElement {
     // Targets (destinations) that should be filtered from the connections list
     const targets = config.targets || [];
     const connections = hass.states[entity].attributes[connectionsAttribute];
+    const exclude = config.exclude || false;
+    const line = config.line ? (Array.isArray(config.line) ? config.line.map(String) : [String(config.line)]) : [];
+    const lineExclude = config.lineExclude || false;
     
     // Get stopAttribute and stop for filtering
     const stopAttribute = config.stopAttribute || 'route'; //where to found route list
@@ -76,9 +79,26 @@ class DepartureCard extends HTMLElement {
     // If there are specified target destinations, filter the connections accordingly
     let filtered_connections = connections;
     if (targets.length > 0) {
-      filtered_connections = connections.filter(connection =>
-        targets.includes(connection.destination)
-      );
+      if (exclude) {
+        filtered_connections = connections.filter(connection =>
+          !targets.includes(connection.destination)
+        );
+      } else {
+        filtered_connections = connections.filter(connection =>
+          targets.includes(connection.destination)
+        );
+      }
+    }
+    if (line.length > 0) {
+      if (lineExclude) {
+        filtered_connections = filtered_connections.filter(connection => 
+          !line.includes(String(connection[config.train]))
+        );
+      } else {
+        filtered_connections = filtered_connections.filter(connection => 
+          line.includes(String(connection[config.train]))
+        );
+      }
     }
     
     // Filter by the specified stop in the route, but only if stop and stopAttribute are valid
@@ -285,6 +305,9 @@ class DepartureCard extends HTMLElement {
       convertTimeHHMM: false,
       relativeTime: false,
       targets: '', 
+      exclude: false,
+      line: '',
+      lineExclude: false,
       train: 'train', 
       departure: 'scheduledTime',
       delay: 'delay',
@@ -364,6 +387,9 @@ class DepartureCard extends HTMLElement {
               default: {},  
               schema: [
                 { name: "targets", selector: { text: {} } },
+                { name: "exclude", selector: { boolean: {} } },
+                { name: "line", selector: { text: {} } },
+                { name: "lineExclude", selector: { boolean: {} } },
                 { name: "stopAttribute", selector: { text: {} } },
                 { name: "filterByStop", selector: { text: {} } },
                 { name: "stationName", selector: { text: {} } }

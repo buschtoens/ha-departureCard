@@ -1,29 +1,32 @@
+> [!WARNING]
+> Personalized fork of the original [`ha-departureCard`](https://github.com/BagelBeef/ha-departureCard) by [@BagelBeef](https://github.com/BagelBeef).
+
 # Custom Departure Card for Home Assistant
-This custom-card is based on the integration [ha-db_infoscreen](https://github.com/FaserF/ha-db_infoscreen/) developed by [FaserF](https://github.com/FaserF). 
+This custom-card is based on the integration [ha-db_infoscreen](https://github.com/FaserF/ha-db_infoscreen/) developed by [FaserF](https://github.com/FaserF).
 
-<img src="https://raw.githubusercontent.com/BagelBeef/ha-departureCard/refs/heads/main/images/KoelnHbf.jpg" alt="Preview1" width="400px">
+<img src="https://raw.githubusercontent.com/buschtoens/ha-departureCard/refs/heads/main/images/KoelnHbf.jpg" alt="Preview1" width="400px">
 
-<img src="https://raw.githubusercontent.com/BagelBeef/ha-departureCard/refs/heads/main/images/Kippekausen.jpg" alt="Preview2" width="400px">
+<img src="https://raw.githubusercontent.com/buschtoens/ha-departureCard/refs/heads/main/images/Kippekausen.jpg" alt="Preview2" width="400px">
 
 ## HACS Installation (recommended)
 
-[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=BagelBeef&repository=ha-departureCard&category=plugin)
+[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=buschtoens&repository=ha-departureCard&category=plugin)
 
 If you use this method your departureCard will always update to the newest version.
 
 ## Manual Installation
 
 To install this custom card, follow these steps:
-	
+
  1.	Download the card’s JavaScript file and add it to the /www/ directory in your Home Assistant instance.
-	
+
  2.	Add the path to this card to your dashboard ressources (options -> dashboard -> three dots -> ressources):
 
 resources:
   - url: /local/departureCard.js
     type: javascript-module
 
-	
+
  3.	Use the example configuration above in your dashboard (manual yaml-configuration).
 
 # Have fun!
@@ -52,17 +55,17 @@ platform: platform
 show_platform: true
 departure: scheduledDeparture
 delay: delayDeparture
-isCancelled: isCancelled 
-stopAttribute: route 
+isCancelled: isCancelled
+stopAttribute: route
 filterByStop: Köln Messe/Deutz
 stationName: Köln Hbf
 ```
 ## Filter Options
-There are multiple ways you can filter and display connections. 
+There are multiple ways you can filter and display connections.
 
 ### 1. Filter by target
-If you want to see all connections with a specific final destination, you can filter your connections by target. 
-This example shows all trains and busses with destination "Düsseldorf Hbf": 
+If you want to see all connections with a specific final destination, you can filter your connections by target.
+This example shows all trains and busses with destination "Düsseldorf Hbf":
 ```yaml
 targets: Düsseldorf Hbf
 ```
@@ -86,21 +89,21 @@ You can check your entity with the template tool in the developer section of you
 ```yaml
 {{ states.sensor.YOUR_ENTITY.attributes }}
 ```
-Usually there should be an route[] item which contains a list of stops. You can use the stopAttribute if the list of stops are not displayed under route or if the name of the element is different. If it's route you can skip this line. 
+Usually there should be an route[] item which contains a list of stops. You can use the stopAttribute if the list of stops are not displayed under route or if the name of the element is different. If it's route you can skip this line.
 
 Since the list of stops contains all stops of the train, we need to know which stops are allready done and which stops are still to go. Therefor you have to provide the information of your stationName.
 ```yaml
 stationName: Köln Hbf
 ```
-All stops before Köln Hbf will be ignored in the list of stops because those are not in the direction of travel. 
+All stops before Köln Hbf will be ignored in the list of stops because those are not in the direction of travel.
 
-Now you have to provide the name of the stop which you want to filter all remaining connections by. 
+Now you have to provide the name of the stop which you want to filter all remaining connections by.
 ```yaml
 filterByStop: Köln Messe/Deutz
 ```
-<img src="https://raw.githubusercontent.com/BagelBeef/ha-departureCard/refs/heads/main/images/filterByStop.jpg" alt="Preview3" width="400px">
+<img src="https://raw.githubusercontent.com/buschtoens/ha-departureCard/refs/heads/main/images/filterByStop.jpg" alt="Preview3" width="400px">
 
-You can skip those lines to disable this filter. 
+You can skip those lines to disable this filter.
 
 ## Parameters Explained
 
@@ -123,7 +126,7 @@ The number of connections (departures) to display.
 Font size used in the table. Allowed values are xs, s (default), m, l and xl.
 
 ### unix_time
-Boolean flag that determines whether to convert Unix time format for timestamps. Check your sensor. If it shows something like 1737619740 it's unix-time.  
+Boolean flag that determines whether to convert Unix time format for timestamps. Check your sensor. If it shows something like 1737619740 it's unix-time.
 
 ### convertTimeHHMM
 Sometimes the timestamp given by the api appears like this "2025-01-26 20:12:00". Set convertTimeHHMM: true if you want to convert those timestamps into HH:MM.
@@ -132,7 +135,7 @@ Sometimes the timestamp given by the api appears like this "2025-01-26 20:12:00"
 If you want to display time values in relative time set realativeTime: true.
 
 ### limit
-All time values above the limit will be displayed in HH:MM. 
+All time values above the limit will be displayed in HH:MM.
 
 Default is set to 60
 

@@ -282,7 +282,15 @@ class DepartureCard extends HTMLElement {
       }
 
       departuresHtml += `
-          <tr class="departure-row ${departureState}">
+          <tr
+            class="departure-row ${departureState}"
+            data-state="${departureState}"
+            data-train="${train}"
+            data-destination="${destination}"
+            data-platform="${platform}"
+            data-departure="${departure}"
+            data-delay="${delay}"
+          >
             <td class="train"><strong>${train}</strong></td>
             <td class="destination"><span class="destination-text">${destination}</span></td>
             ${config.show_platform ? `<td class="platform">${platform}</td>` : ""}

@@ -57,6 +57,8 @@ class DepartureCard extends HTMLElement {
     const convertTimeHHMM = config.convertTimeHHMM || false;
     const relativeTime = config.relativeTime || false;
     const limit = config.limit || 60;
+    const trainRegex = config.trainRegex ? new RegExp(config.trainRegex) : undefined;
+    const stationRegex = config.stationRegex ? new RegExp(config.stationRegex) : undefined;
 
     // Targets (destinations) that should be filtered from the connections list
     const targets = config.targets || [];
@@ -233,8 +235,18 @@ class DepartureCard extends HTMLElement {
 
     // Loop through the filtered connections and display them
     filtered_connections.slice(0, displayed_connections).forEach(connection => {
-      const train = connection[config.train];
-      const destination = connection.destination;
+      let train = connection[config.train];
+      if (trainRegex) {
+        const match = trainRegex.exec(train);
+        if (match) train = match[0];
+      }
+
+      let destination = connection.destination;
+      if (stationRegex) {
+        const match = stationRegex.exec(destination);
+        if (match) destination = match[0];
+      }
+
       const delay = connection[config.delay] || 0;
       const platform = connection[config.platform] || 'N/A';  // Default to 'N/A' if no platform info
       const isCancelled = connection[config.isCancelled || 'isCancelled'] || 0;
@@ -344,7 +356,9 @@ class DepartureCard extends HTMLElement {
       isCancelled: 'isCancelled',
       stopAttribute: 'route',  // Attribute for the stops/route
       filterByStop: '',   // The specific stop to filter by
-      stationName: ''  // Your stationName for deleting stops before it
+      stationName: '',  // Your stationName for deleting stops before it,
+      trainRegex: '', // Regex to extract a sub-string from the train property
+      stationRegex: '', // Regex to extract a sub-string from the station property
     };
   }
 
@@ -380,6 +394,20 @@ class DepartureCard extends HTMLElement {
             { name: "isCancelled", selector: { text: {} } },
             { name: "platform", selector: { text: {} } },
             { name: "show_platform", selector: { boolean: {} } },
+          ]
+        },
+        {
+          type: "constant",
+          name: "Property Extraction Regexes"
+        },
+        {
+          name: "",
+          type: "grid",
+          multiple: false,
+          default: {},
+          schema: [
+            { name: "trainRegex", selector: { text: {} } },
+            { name: "stationRegex", selector: { text: {} } }
           ]
         },
         {
